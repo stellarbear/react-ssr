@@ -1,0 +1,41 @@
+{
+	"home": {
+		"title": "ещё один SSR шаблон",
+		"description": [
+			"кое-что из *внутренностей*:",
+			"**0**. React",
+			"**1**. I18next",
+			"**2**. Markdown",
+			"**3**. Typescript",
+			"**4**. Local fonts",
+			"**5**. SSR (Razzle)",
+			"**6**. React helmet (hreflangs)",
+			"**7**. Mobile friendly navigation",
+			"**8**. Material UI + notifications + local font",
+			"**9**. PWA (serviceworker bundled and notifies users)",
+			"**10**. React router v4 (smooth transitions, 404, language routing and switching)",
+			"",
+			"Это маленький проект, цель которого упростить разработку React SSR приложений (для меня)"
+		]
+	},
+	"about": {
+		"author": "[stellarbear](https://github.com/stellarbear)",
+		"textFieldLabel": "Введите произвольный текст",
+		"copyButton": "Скопировать"
+	},
+	"navigation": {
+		"home": "Главная",
+		"about": "Контакты",
+		"title": "Мобильная версия"
+	},
+	"notFound": {
+		"message": "Страница не найдена"
+	},
+	"notify": {
+		"pwa": {
+			"ready": "Содержимое закешировано и готово для оффлайн использования [PWA ready].",
+			"update": "Доступно обновление содержимого, пожалуйста, перезагрузите браузер"
+		},
+		"copied": "Текст скопирован в буфер обмена"
+	}
+}

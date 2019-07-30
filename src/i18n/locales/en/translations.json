@@ -1,0 +1,41 @@
+{
+	"home": {
+		"title": "yet another SSR boilerplate",
+		"description": [
+			"*backed* with:",
+			"**0**. React",
+			"**1**. I18next",
+			"**2**. Markdown",
+			"**3**. Typescript",
+			"**4**. Local fonts",
+			"**5**. SSR (Razzle)",
+			"**6**. React helmet (hreflangs)",
+			"**7**. Mobile friendly navigation",
+			"**8**. Material UI + notifications + local font",
+			"**9**. PWA (serviceworker bundled and notifies users)",
+			"**10**. React router v4 (smooth transitions, 404, language routing and switching)",
+			"",
+			"This is a small project that is aimed to simplify React SSR development (for me)"
+		]
+	},
+	"about": {
+		"author": "[stellarbear](https://github.com/stellarbear)",
+		"textFieldLabel": "Enter custom text",
+		"copyButton": "Copy text"
+	},
+	"navigation": {
+		"home": "Home",
+		"about": "About",
+		"title": "mobile header"
+	},
+  "notFound": {
+    "message": "Page is not found"
+  },
+	"notify" : {
+		"pwa": {
+			"ready": "Content is cached for offline use [PWA ready].",
+			"update": "New content is available, please reload your web browser"
+		},
+		"copied": "Text is copied to clipboard"
+	}
+}
