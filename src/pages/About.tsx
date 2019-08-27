@@ -23,7 +23,7 @@ const About: React.FC = (): JSX.Element => {
 			justify="center"
 			alignItems="center"
 		>
-			<Grid item xs>
+			<Grid item sm={12} md={6}>
 				<Card>
 					<CardContent>
 						<TextField
