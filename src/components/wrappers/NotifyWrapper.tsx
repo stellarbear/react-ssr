@@ -1,26 +1,23 @@
 import React, { useState, createContext, useEffect } from "react";
 import { Snackbar, Fade, IconButton } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
+import * as serviceWorker from "serviceWorker";
 
-import { useTranslation } from "react-i18next";
-import * as serviceWorker from 'serviceWorker';
-
-//  https://stackoverflow.com/questions/41030361/how-to-update-react-context-from-inside-a-child-component
 const NotificationContext = createContext({
 	message: "",
-	updateMessage: (_: string): void => { }
+	updateMessage: (message: string) => { },
 });
 
-
-interface NotifyProps {
-	children: JSX.Element;
+interface INotifyWrapperProps {
 	timeout?: number;
 }
 
-const NotifyWrapper: React.FC<NotifyProps> = ({ children, timeout }): JSX.Element => {
-	const { t } = useTranslation();
+const NotifyWrapper: React.FC<INotifyWrapperProps> = ({
+	children,
+	timeout = 4096
+}): JSX.Element => {
 	const [open, setOpen] = useState(false);
-	const [message, setMessage] = useState('');
+	const [message, setMessage] = useState("");
 
 	const updateMessage = (message: string): void => {
 		setMessage(message);
@@ -34,8 +31,8 @@ const NotifyWrapper: React.FC<NotifyProps> = ({ children, timeout }): JSX.Elemen
 	useEffect((): void => {
 		if ("serviceWorker" in navigator) {
 			serviceWorker.register({
-				onSuccess: (registration: ServiceWorkerRegistration): void => updateMessage(t('notify.pwa.ready')),
-				onUpdate: (registration: ServiceWorkerRegistration): void => updateMessage(t('notify.pwa.update')),
+				onSuccess: (registration: ServiceWorkerRegistration): void => updateMessage("PWA ready"),
+				onUpdate: (registration: ServiceWorkerRegistration): void => updateMessage("PWA update"),
 			});
 		} else {
 			/* eslint-disable-next-line no-console */
@@ -47,7 +44,7 @@ const NotifyWrapper: React.FC<NotifyProps> = ({ children, timeout }): JSX.Elemen
 		return (
 			<Snackbar
 				autoHideDuration={timeout}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+				anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
 				open={open}
 				message={message}
 				onClose={handleClose}
@@ -74,10 +71,6 @@ const NotifyWrapper: React.FC<NotifyProps> = ({ children, timeout }): JSX.Elemen
 			</React.Fragment>
 		</NotificationContext.Provider>
 	);
-}
-
-NotifyWrapper.defaultProps = {
-	timeout: 4096
 }
 
 export { NotifyWrapper, NotificationContext }

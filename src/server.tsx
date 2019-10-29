@@ -14,31 +14,20 @@ import { I18nextProvider } from 'react-i18next';
 import { i18n, getLanguages, fallbackLng } from 'i18n';
 import { LanguageDetector, handle } from "i18next-express-middleware";
 
-
 import { theme } from 'theme';
 import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles';
 
 import customCss from "css";
 import "fonts/index.css";
 
-
-interface IAsset {
-	js: string;
-	css: string;
-}
-
-interface IAssets {
-	client: IAsset;
-}
-
 interface ITemplate {
 	ssrCss: string;
 	customCss: string;
 	markup: string;
-	assets: IAssets;
 	helmet: HelmetData;
 	initialLanguage: string;
 	initialI18nStore: i18n.ResourceLanguage;
+	assets: { client: { js: string; css: string; } };
 }
 
 declare module "express" {
@@ -76,9 +65,9 @@ const template = ({ helmet, markup, assets, initialI18nStore, initialLanguage, s
 
 	<script>
 		window.initialI18nStore = JSON.parse('${JSON.stringify(
-		initialI18nStore
-		/* eslint-disable-next-line no-useless-escape */
-	).replace(/[\/\(\)\']/g, '\\$&')}');
+			initialI18nStore
+			/* eslint-disable-next-line no-useless-escape */
+		).replace(/[\/\(\)\']/g, '\\$&')}');
 		window.initialLanguage = '${initialLanguage}';
 	</script>
 </head>
@@ -127,7 +116,7 @@ const minifyCss = (css: string): string => {
 }
 
 i18n
-	.use(Backend)
+	.use(Backend as any)
 	.use(LanguageDetector)
 	.init(
 		i18nOptions,
@@ -157,7 +146,7 @@ i18n
 					if (url) {
 						res.redirect(url);
 					} else {
-						const assets: IAssets = await import(process.env.RAZZLE_ASSETS_MANIFEST as string);
+						const assets = await import(process.env.RAZZLE_ASSETS_MANIFEST as string);
 
 						res.status(200).send(
 							template({

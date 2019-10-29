@@ -4,27 +4,30 @@ import { MenuItem, Select, Input, createStyles, Theme } from '@material-ui/core'
 import { useTranslation } from 'react-i18next';
 import { changeLanguageSafe } from 'i18n';
 import { ILanguageMeta } from 'i18n/i18n';
-import { WithStyles, withStyles } from '@material-ui/core/styles';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const color = "#FAFAFA";
-const styles = (theme: Theme): Record<"icon", CSSProperties | (() => CSSProperties)> => createStyles({
-	icon: {
-		fill: color,
-	},
-});
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		icon: {
+			fill: "#FAFAFA",
+		},
+	})
+);
 
-interface LanguagePickerProps extends WithStyles<typeof styles> {
+interface LanguagePickerProps {
 	inverted?: boolean;
 }
 
-const LanguagePicker: React.FC<LanguagePickerProps> = ({ inverted, classes }): JSX.Element => {
+const LanguagePicker: React.FC<LanguagePickerProps> = ({
+	inverted = false
+}): JSX.Element => {
+	const classes = useStyles();
 	const { i18n } = useTranslation();
 
-	const onLanguageChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>, child: React.ReactNode): void =>
-		changeLanguageSafe(event.target.value as string);
+	const onLanguageChange = (value: string) =>
+		changeLanguageSafe(value);
 
-	const buildPicker = (): JSX.Element => {
+	const buildPicker = () => {
 		const languages: ILanguageMeta[] = getLanguages().map((language: string): ILanguageMeta => getLanguageMeta(language));
 
 		const { language } = i18n;
@@ -39,7 +42,7 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ inverted, classes }): J
 				value={language}
 				disableUnderline
 				inputProps={inputProps}
-				onChange={onLanguageChange}
+				onChange={({ target: { value } }, child) => onLanguageChange(value as string)}
 				input={<Input name="lang" />}
 			>
 				{languages.map((language: ILanguageMeta): JSX.Element =>
@@ -58,8 +61,4 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ inverted, classes }): J
 	return buildPicker();
 }
 
-LanguagePicker.defaultProps = {
-	inverted: false,
-};
-
-export default withStyles(styles)(LanguagePicker);
+export default LanguagePicker;
