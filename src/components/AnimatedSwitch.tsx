@@ -8,7 +8,7 @@ const AnimatedSwitch: React.FC<RouteComponentProps> = ({
 	location,
 	children
 }): JSX.Element => (
-		<TransitionGroup component="main" className="animated-router-outer">
+		<TransitionGroup component="div" className="animated-router-outer">
 			<CSSTransition key={location.key} timeout={300} classNames="fade" appear>
 				<section className="animated-router-inner">
 					<Switch location={location}>

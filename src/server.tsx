@@ -8,10 +8,11 @@ import fs from 'fs';
 import path from 'path';
 import express from 'express';
 
+import { i18n as i18nInitialized } from "i18n";
 import App from './app';
 import Backend from 'i18next-node-fs-backend';
 import { I18nextProvider } from 'react-i18next';
-import { i18n, getLanguages, fallbackLng } from 'i18n';
+import { getLanguages, fallbackLng } from 'i18n';
 import { LanguageDetector, handle } from "i18next-express-middleware";
 
 import { theme } from 'theme';
@@ -26,14 +27,8 @@ interface ITemplate {
 	markup: string;
 	helmet: HelmetData;
 	initialLanguage: string;
-	initialI18nStore: i18n.ResourceLanguage;
+	initialI18nStore: i18nInitialized.ResourceLanguage;
 	assets: { client: { js: string; css: string; } };
-}
-
-declare module "express" {
-	export interface Request {
-		i18n: i18n.i18n;
-	}
 }
 
 const server = express();
@@ -115,7 +110,7 @@ const minifyCss = (css: string): string => {
 	return css;
 }
 
-i18n
+i18nInitialized
 	.use(Backend as any)
 	.use(LanguageDetector)
 	.init(
@@ -123,7 +118,7 @@ i18n
 		(): void => {
 			server
 				.disable('x-powered-by')
-				.use(handle(i18n))
+				.use(handle(i18nInitialized))
 				.use('/locales', express.static(`${appSrc}/i18n/locales`))
 				.use(express.static(process.env.RAZZLE_PUBLIC_DIR as string))
 				.get('/*', async (req: express.Request, res: express.Response): Promise<void> => {

@@ -3,8 +3,6 @@ import { useSSR } from 'react-i18next';
 import React, { Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import 'i18n';
-
 import App from 'app';
 
 import { theme } from 'theme';
