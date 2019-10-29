@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import express from 'express';
 
-import { i18n as i18nInitialized } from "i18n";
+import { i18n } from "i18n";
 import App from './app';
 import Backend from 'i18next-node-fs-backend';
 import { I18nextProvider } from 'react-i18next';
@@ -27,7 +27,7 @@ interface ITemplate {
 	markup: string;
 	helmet: HelmetData;
 	initialLanguage: string;
-	initialI18nStore: i18nInitialized.ResourceLanguage;
+	initialI18nStore: i18n.ResourceLanguage;
 	assets: { client: { js: string; css: string; } };
 }
 
@@ -110,7 +110,7 @@ const minifyCss = (css: string): string => {
 	return css;
 }
 
-i18nInitialized
+i18n
 	.use(Backend as any)
 	.use(LanguageDetector)
 	.init(
@@ -118,17 +118,18 @@ i18nInitialized
 		(): void => {
 			server
 				.disable('x-powered-by')
-				.use(handle(i18nInitialized))
+				.use(handle(i18n))
 				.use('/locales', express.static(`${appSrc}/i18n/locales`))
 				.use(express.static(process.env.RAZZLE_PUBLIC_DIR as string))
-				.get('/*', async (req: express.Request, res: express.Response): Promise<void> => {
+				.get('/*', async (req: express.Request, res: express.Response) => {
+					const { i18n } = req as any;
 					const context: StaticRouterContext = {};
 					const sheets: ServerStyleSheets = new ServerStyleSheets();
 
 					const markup: string = renderToString(
 						sheets.collect(
 							<ThemeProvider theme={theme}>
-								<I18nextProvider i18n={req.i18n}>
+								<I18nextProvider i18n={i18n}>
 									<StaticRouter context={context} location={req.url}>
 										<App />
 									</StaticRouter>
@@ -150,8 +151,8 @@ i18nInitialized
 								customCss: minifyCss(customCss),
 								ssrCss: minifyCss(sheets.toString()),
 								helmet: Helmet.renderStatic(),
-								initialLanguage: req.i18n.language,
-								initialI18nStore: req.i18n.services.resourceStore.data
+								initialLanguage: i18n.language,
+								initialI18nStore: i18n.services.resourceStore.data
 							}),
 						);
 					}
